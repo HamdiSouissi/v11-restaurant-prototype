@@ -3,21 +3,19 @@
   <h2 class="gallery__title" id="gallery-title">
     <span>La</span> <span class="gallery__title--italic">galleria</span>
   </h2>
-  <div class="swiper gallery__swiper" id="gallery-swiper">
-    <div class="swiper-wrapper">
-      <?php foreach ($C['gallery'] as $i => $g): ?>
-      <div class="swiper-slide gallery__slide" data-idx="<?php echo $i; ?>">
-        <div class="gallery__frame">
-          <img src="/assets/img/<?php echo htmlspecialchars($g['slug']); ?>.webp"
-               alt="<?php echo htmlspecialchars($g['caption_it']); ?>"
-               width="800" height="1000" loading="lazy">
-        </div>
-        <p class="gallery__caption" data-i18n-cap-it="<?php echo htmlspecialchars($g['caption_it']); ?>" data-i18n-cap-en="<?php echo htmlspecialchars($g['caption_en']); ?>">
-          <?php echo htmlspecialchars($g['caption_it']); ?>
-        </p>
+  <div class="gallery__scroll" id="gallery-scroll">
+    <?php foreach ($C['gallery'] as $i => $g): ?>
+    <div class="gallery__item" data-idx="<?php echo $i; ?>">
+      <div class="gallery__frame">
+        <img src="/assets/img/<?php echo htmlspecialchars($g['slug']); ?>.webp"
+             alt="<?php echo htmlspecialchars($g['caption_it']); ?>"
+             width="800" height="1000" loading="lazy">
       </div>
-      <?php endforeach; ?>
+      <p class="gallery__caption" data-i18n-cap-it="<?php echo htmlspecialchars($g['caption_it']); ?>" data-i18n-cap-en="<?php echo htmlspecialchars($g['caption_en']); ?>">
+        <?php echo htmlspecialchars($g['caption_it']); ?>
+      </p>
     </div>
+    <?php endforeach; ?>
   </div>
 </section>
 

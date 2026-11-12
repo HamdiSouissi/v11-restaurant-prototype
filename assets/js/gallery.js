@@ -1,38 +1,23 @@
-/** BRACE — gallery: Swiper freeMode + lightbox */
+/** BRACE — gallery: pure CSS scroll + lightbox */
 (function () {
   'use strict';
 
   function initGallery() {
-    const swiperEl = document.getElementById('gallery-swiper');
-    if (!swiperEl || typeof Swiper === 'undefined') {
-      // Fallback: display all slides in a horizontal scroll if Swiper fails
-      const wrapper = swiperEl?.querySelector('.swiper-wrapper');
-      if (wrapper) {
-        wrapper.style.display = 'flex';
-        wrapper.style.overflowX = 'auto';
-        wrapper.style.scrollSnapType = 'x mandatory';
-      }
-      return;
-    }
+    const scrollContainer = document.getElementById('gallery-scroll');
+    if (!scrollContainer) return;
 
-    new Swiper(swiperEl, {
-      slidesPerView: 'auto',
-      spaceBetween: 16,
-      freeMode: { enabled: true, momentum: true, momentumRatio: 0.8 },
-      grabCursor: true,
-      speed: 600,
-      loop: false,
-    });
+    const items = scrollContainer.querySelectorAll('.gallery__item');
 
-    // Parallax per image based on position
-    const slides = swiperEl.querySelectorAll('.gallery__slide');
+    // Parallax effect on scroll
     window.addEventListener('scroll', () => {
-      slides.forEach(s => {
-        const r = s.getBoundingClientRect();
+      items.forEach(item => {
+        const r = item.getBoundingClientRect();
         const center = window.innerHeight / 2;
         const offset = (r.top + r.height / 2 - center) / center;
-        const img = s.querySelector('img');
-        if (img) img.style.transform = `translateY(${offset * -12}px)`;
+        const img = item.querySelector('img');
+        if (img && Math.abs(offset) < 1.5) {
+          img.style.transform = `translateY(${offset * -8}px)`;
+        }
       });
     }, { passive: true });
 
@@ -47,15 +32,15 @@
     function openLightbox(idx) {
       previouslyFocused = document.activeElement;
       currentIndex = idx;
-      const slide = slides[idx];
-      if (!slide) return;
-      const img = slide.querySelector('img');
-      const caption = slide.querySelector('.gallery__caption');
+      const item = items[idx];
+      if (!item) return;
+      const img = item.querySelector('img');
+      const caption = item.querySelector('.gallery__caption');
       if (lightboxImg && img) {
         lightboxImg.src = img.src;
         lightboxImg.alt = img.alt;
       }
-      if (lightboxCounter) lightboxCounter.textContent = `${String(idx + 1).padStart(2, '0')} / ${slides.length}`;
+      if (lightboxCounter) lightboxCounter.textContent = `${String(idx + 1).padStart(2, '0')} / ${items.length}`;
       if (lightboxCaption) lightboxCaption.textContent = caption?.textContent || '';
       if (lightbox) { lightbox.hidden = false; requestAnimationFrame(() => lightbox.classList.add('is-open')); }
       document.getElementById('lightbox-close')?.focus();
@@ -69,7 +54,7 @@
     }
 
     function navigate(dir) {
-      currentIndex = (currentIndex + dir + slides.length) % slides.length;
+      currentIndex = (currentIndex + dir + items.length) % items.length;
       openLightbox(currentIndex);
     }
 
@@ -78,9 +63,9 @@
     document.getElementById('lightbox-next')?.addEventListener('click', () => navigate(1));
     lightbox?.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
-    slides.forEach((s, i) => {
-      s.style.cursor = 'pointer';
-      s.addEventListener('click', () => openLightbox(i));
+    items.forEach((item, i) => {
+      item.style.cursor = 'pointer';
+      item.addEventListener('click', () => openLightbox(i));
     });
 
     document.addEventListener('keydown', (e) => {
