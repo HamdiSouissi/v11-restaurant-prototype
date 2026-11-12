@@ -112,16 +112,18 @@ i, em, .italic { font-style: italic; }
 /* ---------- Section base ---------- */
 .section {
   position: relative;
-  min-height: 100vh;
-  padding: 120px 48px;
+  padding: 80px 32px;
   transition: background-color 600ms var(--ease-in-out);
 }
 .section--carbone { background-color: var(--carbone); color: var(--osso); }
 .section--fumo    { background-color: var(--fumo); color: var(--osso); }
 .section--osso    { background-color: var(--osso); color: var(--inchiostro); }
 
+.section--hero { min-height: 100vh; }
+.section--manifesto { min-height: 100vh; }
+
 @media (max-width: 768px) {
-  .section { padding: 80px 20px; }
+  .section { padding: 60px 20px; }
 }
 
 /* ---------- Preloader ---------- */
@@ -295,12 +297,17 @@ i, em, .italic { font-style: italic; }
   width: 100%; height: 100%;
   object-fit: cover;
   filter: brightness(0.45);
+  z-index: 2;
 }
 .hero__poster {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 600ms;
 }
+.hero__poster.is-visible { opacity: 1; z-index: 3; }
 .hero__grain {
   position: absolute; inset: 0;
   opacity: 0.06;
@@ -426,7 +433,7 @@ i, em, .italic { font-style: italic; }
 .forno__layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: 60px;
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
@@ -445,24 +452,24 @@ i, em, .italic { font-style: italic; }
   transition: transform 1200ms var(--ease-out-expo);
 }
 .forno__title {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 .forno__title--italic { font-style: italic; }
 .forno__text {
-  font-size: 18px;
+  font-size: 17px;
   color: rgba(232, 226, 214, 0.78);
   max-width: 440px;
-  margin-bottom: 56px;
+  margin-bottom: 40px;
 }
 .forno__counters {
-  display: flex; gap: 48px; flex-wrap: wrap;
+  display: flex; gap: 40px; flex-wrap: wrap;
 }
 .forno__counter {
   display: flex; flex-direction: column; gap: 6px;
 }
 .forno__counter-num {
   font-family: var(--ff-display);
-  font-size: 72px;
+  font-size: 64px;
   font-weight: 400;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
@@ -470,7 +477,7 @@ i, em, .italic { font-style: italic; }
 }
 .forno__counter-unit {
   font-family: var(--ff-display);
-  font-size: 36px;
+  font-size: 32px;
   color: var(--cenere);
 }
 .forno__counter-label {
@@ -487,7 +494,7 @@ i, em, .italic { font-style: italic; }
 }
 
 /* ---------- Classici ---------- */
-.classici__header { max-width: 1400px; margin: 0 auto 80px; }
+.classici__header { max-width: 1400px; margin: 0 auto 40px; }
 .classici__title--italic { font-style: italic; }
 .classici__stack {
   position: relative;
@@ -499,10 +506,10 @@ i, em, .italic { font-style: italic; }
   top: 120px;
   display: grid;
   grid-template-columns: 1.1fr 1fr;
-  gap: 80px;
+  gap: 60px;
   align-items: center;
-  padding: 60px 0;
-  margin-bottom: 40px;
+  padding: 40px 0;
+  margin-bottom: 30px;
   background: var(--fumo);
   border-radius: 4px;
   transition: transform 600ms var(--ease-out-power3), opacity 600ms var(--ease-out-power3);
@@ -524,25 +531,25 @@ i, em, .italic { font-style: italic; }
   transition: transform 800ms var(--ease-out-power3);
 }
 .classici__card:hover .classici__card-media img { transform: scale(1.04); }
-.classici__card-body { padding: 40px 48px 40px 0; }
+.classici__card-body { padding: 30px 40px 30px 0; }
 .classici__num {
   font-family: var(--ff-display);
   font-style: italic;
-  font-size: 120px;
+  font-size: 100px;
   color: var(--cenere);
   opacity: 0.45;
   line-height: 1;
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .classici__dish {
-  font-size: clamp(42px, 6vw, 80px);
-  margin-bottom: 16px;
+  font-size: clamp(36px, 5vw, 64px);
+  margin-bottom: 14px;
 }
 .classici__desc {
-  font-size: 17px;
+  font-size: 16px;
   color: rgba(232, 226, 214, 0.72);
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   max-width: 420px;
 }
 .classici__price-row {
@@ -684,12 +691,14 @@ i, em, .italic { font-style: italic; }
   position: sticky;
   top: 120px;
   align-self: start;
+  z-index: 10;
 }
 .menu__preview {
   overflow: hidden;
   aspect-ratio: 5/6;
   clip-path: inset(0);
   transition: clip-path 800ms var(--ease-out-expo);
+  background: var(--fumo);
 }
 .menu__preview img {
   width: 100%; height: 100%;
@@ -875,11 +884,20 @@ i, em, .italic { font-style: italic; }
 .builder__visual {
   position: sticky; top: 120px;
 }
-.builder-base { transition: fill 600ms; }
-.builder-crust { transition: stroke 600ms; }
-.builder-toppings circle {
-  transition: transform 500ms var(--ease-out-power3), opacity 400ms;
-  transform-origin: center;
+.builder__pizza-img {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--fumo);
+}
+.builder__pizza-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--ease-out-power3);
+}
+.builder__pizza-img:hover img {
+  transform: scale(1.03);
 }
 
 .builder__step {
@@ -1280,13 +1298,14 @@ i, em, .italic { font-style: italic; }
 }
 .gallery__swiper .swiper-wrapper { align-items: flex-end; }
 .gallery__slide {
-  width: auto;
+  width: 320px;
   flex-shrink: 0;
   margin-right: 16px;
 }
 .gallery__frame {
   overflow: hidden;
   position: relative;
+  aspect-ratio: 4/5;
 }
 .gallery__frame img {
   transition: transform 1200ms var(--ease-out-expo);
@@ -1350,25 +1369,25 @@ i, em, .italic { font-style: italic; }
 
 /* ---------- Reviews ---------- */
 .reviews__layout {
-  max-width: 1000px;
+  max-width: 800px;
   margin: 0 auto;
   text-align: center;
 }
 .reviews__stars {
   display: flex; justify-content: center; gap: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   color: var(--cenere);
 }
 .reviews__stars svg { stroke: var(--cenere); fill: var(--brace); }
 .reviews__rating {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--cenere);
-  margin-bottom: 64px;
+  margin-bottom: 40px;
 }
 .reviews__rotator {
   position: relative;
-  min-height: 200px;
-  margin-bottom: 48px;
+  min-height: 160px;
+  margin-bottom: 32px;
 }
 .reviews__quote {
   position: absolute; inset: 0;
@@ -1385,12 +1404,12 @@ i, em, .italic { font-style: italic; }
 .reviews__text {
   font-family: var(--ff-display);
   font-style: italic;
-  font-size: clamp(32px, 5vw, 64px);
-  line-height: 1.15;
-  margin-bottom: 24px;
+  font-size: clamp(24px, 3.5vw, 42px);
+  line-height: 1.2;
+  margin-bottom: 20px;
 }
 .reviews__author {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
@@ -1535,7 +1554,7 @@ i, em, .italic { font-style: italic; }
 .site-footer {
   position: relative;
   background: var(--carbone);
-  padding: 120px 48px 40px;
+  padding: 60px 32px 30px;
   overflow: hidden;
 }
 .footer__embers-wrap {
@@ -1548,30 +1567,30 @@ i, em, .italic { font-style: italic; }
 .footer__wordmark {
   position: relative;
   z-index: 2;
-  display: flex; justify-content: center; gap: 12px;
+  display: flex; justify-content: center; gap: 8px;
   font-family: var(--ff-display);
-  font-size: clamp(72px, 18vw, 220px);
+  font-size: clamp(48px, 12vw, 140px);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--cenere);
-  margin-bottom: 80px;
+  margin-bottom: 40px;
 }
 .footer__wordmark span {
   transition: color 600ms var(--ease-out-power3), transform 400ms var(--ease-out-power3);
   display: inline-block;
 }
-.footer__wordmark span.is-heated { color: var(--brace); transform: translateY(-8px); }
+.footer__wordmark span.is-heated { color: var(--brace); transform: translateY(-6px); }
 .footer__newsletter {
   position: relative; z-index: 2;
-  max-width: 480px;
-  margin: 0 auto 80px;
+  max-width: 420px;
+  margin: 0 auto 50px;
   text-align: center;
 }
 .footer__nl-label {
   font-family: var(--ff-display);
   font-style: italic;
-  font-size: 28px;
-  margin-bottom: 20px;
+  font-size: 22px;
+  margin-bottom: 16px;
 }
 .footer__nl-form {
   display: flex; gap: 8px;
@@ -1581,8 +1600,8 @@ i, em, .italic { font-style: italic; }
   background: transparent;
   border: 1px solid rgba(232, 226, 214, 0.2);
   border-radius: 2px;
-  padding: 12px 16px;
-  font-size: 15px;
+  padding: 10px 14px;
+  font-size: 14px;
   color: var(--osso);
 }
 .footer__nl-form input:focus { outline: none; border-color: var(--brace); }
@@ -1590,8 +1609,8 @@ i, em, .italic { font-style: italic; }
 
 .footer__bottom {
   position: relative; z-index: 2;
-  display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 20px;
   flex-wrap: wrap;
 }
 .footer__socials {

@@ -55,9 +55,9 @@
               <div class="menu__item-title-row">
                 <h4 class="menu__item-title"><?php echo htmlspecialchars($item['name_it']); ?></h4>
                 <div class="menu__item-tags" aria-label="Caratteristiche">
-                  <?php if (!empty($item['veg'])): ?><span class="tag tag--veg" title="Vegetariano">V</span><?php endif; ?>
-                  <?php if (!empty($item['piccante'])): ?><span class="tag tag--piccante" title="Piccante">P</span><?php endif; ?>
-                  <?php if (!empty($item['gluten_free'])): ?><span class="tag tag--gf" title="Senza glutine">GF</span><?php endif; ?>
+                  <?php if (!empty($item['veg'])): ?><span class="tag tag--veg" title="Vegetariano">Veg</span><?php endif; ?>
+                  <?php if (!empty($item['piccante'])): ?><span class="tag tag--piccante" title="Piccante">Piccante</span><?php endif; ?>
+                  <?php if (!empty($item['gluten_free'])): ?><span class="tag tag--gf" title="Senza glutine">Senza glutine</span><?php endif; ?>
                 </div>
               </div>
               <span class="menu__item-price">€ <?php echo htmlspecialchars($item['price']); ?></span>

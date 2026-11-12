@@ -9,11 +9,9 @@
     </div>
 
     <div class="builder__visual">
-      <svg id="builder-pizza-svg" viewBox="0 0 400 400" width="100%" aria-hidden="true">
-        <circle class="builder-base" cx="200" cy="200" r="170" fill="#3A2A1E" stroke="#1E1510" stroke-width="3"/>
-        <circle class="builder-crust" cx="200" cy="200" r="170" fill="none" stroke="#4A3828" stroke-width="18"/>
-        <g class="builder-toppings" aria-hidden="true"></g>
-      </svg>
+      <div class="builder__pizza-img">
+        <img src="/assets/img/pizza-builder.webp" alt="Pizza artesanal" width="900" height="900">
+      </div>
     </div>
 
     <div class="builder__steps" id="builder-steps">

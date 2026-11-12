@@ -1,10 +1,19 @@
-/** BRACE — gallery: Swiper freeMode + lightbox with Flip */
+/** BRACE — gallery: Swiper freeMode + lightbox */
 (function () {
   'use strict';
 
   function initGallery() {
     const swiperEl = document.getElementById('gallery-swiper');
-    if (!swiperEl || typeof Swiper === 'undefined') return;
+    if (!swiperEl || typeof Swiper === 'undefined') {
+      // Fallback: display all slides in a horizontal scroll if Swiper fails
+      const wrapper = swiperEl?.querySelector('.swiper-wrapper');
+      if (wrapper) {
+        wrapper.style.display = 'flex';
+        wrapper.style.overflowX = 'auto';
+        wrapper.style.scrollSnapType = 'x mandatory';
+      }
+      return;
+    }
 
     new Swiper(swiperEl, {
       slidesPerView: 'auto',
@@ -12,6 +21,7 @@
       freeMode: { enabled: true, momentum: true, momentumRatio: 0.8 },
       grabCursor: true,
       speed: 600,
+      loop: false,
     });
 
     // Parallax per image based on position
