@@ -41,19 +41,26 @@
 <script>
 window.CONFIG = <?php
   $safe = $C;
-  // strip PHP-only keys we don't need in JS
-  unset($safe['booking']); // still needed for floorplan — keep it
   echo json_encode($safe, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 ?>;
 window.MENU = <?php echo json_encode($C['menu'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
 window.I18N = <?php echo json_encode($C['i18n'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
 document.documentElement.classList.remove('no-js');
+
+// HARD FALLBACK: if main.js never runs (CDN blocked, network error),
+// still unblock the body after 3s so the page is usable.
+(function(){
+  var t = setTimeout(function(){
+    document.body.classList.remove('no-scroll-preload');
+    var p = document.getElementById('preloader');
+    if (p && p.parentNode) p.remove();
+  }, 3000);
+  window.__bracePreloaderCleared = function(){ clearTimeout(t); };
+})();
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>

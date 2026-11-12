@@ -62,17 +62,18 @@
       });
     });
 
-    // Hero title lines
-    if (st && window.SplitText) {
-      gsap.utils.toArray('.hero__line-inner').forEach((line, i) => {
-        gsap.to(line, {
-          y: 0, duration: 1.1, ease: 'power3.out', delay: 0.2 + i * 0.12,
-          scrollTrigger: { trigger: '#hero', start: 'top top' }
-        });
+    // Hero title lines — SplitText/Flip are premium GSAP plugins not on CDN,
+    // so we animate lines manually with CSS transforms instead.
+    gsap.utils.toArray('.hero__line-inner').forEach((line, i) => {
+      // Set initial hidden state, then reveal
+      gsap.set(line, { y: '110%' });
+      gsap.to(line, {
+        y: 0,
+        duration: 1.1,
+        ease: 'power3.out',
+        delay: 0.4 + i * 0.14,
       });
-    } else {
-      gsap.utils.toArray('.hero__line-inner').forEach(line => gsap.set(line, { y: 0 }));
-    }
+    });
 
     // Manifesto word-by-word scrub
     const manifestoText = document.getElementById('manifesto-text');
@@ -188,6 +189,8 @@
   function initPreloader() {
     const p = document.getElementById('preloader');
     if (!p) return;
+
+    // If already preloaded this session, remove immediately
     if (sessionStorage.getItem('brace_preloaded')) {
       p.remove();
       document.body.classList.remove('no-scroll-preload');
@@ -199,6 +202,21 @@
     const target = 485;
     const start = performance.now();
     const duration = 1400;
+    let done = false;
+
+    function finish() {
+      if (done) return;
+      done = true;
+      p.classList.add('preloader-loaded');
+      setTimeout(() => {
+        p.classList.add('preloader-exit');
+        setTimeout(() => {
+          if (p.parentNode) p.remove();
+          document.body.classList.remove('no-scroll-preload');
+          sessionStorage.setItem('brace_preloaded', '1');
+        }, 720);
+      }, 200);
+    }
 
     function tick(now) {
       const t = Math.min(1, (now - start) / duration);
@@ -206,19 +224,18 @@
       cur = Math.round(eased * target);
       if (deg) deg.textContent = cur;
       if (t < 1) requestAnimationFrame(tick);
-      else {
-        p.classList.add('preloader-loaded');
-        setTimeout(() => {
-          p.classList.add('preloader-exit');
-          setTimeout(() => {
-            p.remove();
-            document.body.classList.remove('no-scroll-preload');
-            sessionStorage.setItem('brace_preloaded', '1');
-          }, 720);
-        }, 200);
-      }
+      else finish();
     }
     requestAnimationFrame(tick);
+
+    // HARD FALLBACK: force dismiss preloader after 2.5s even if rAF stalls
+    // (covers CDN failures, blocked scripts, slow networks)
+    setTimeout(() => { if (!done) finish(); }, 2500);
+
+    // Cancel the inline head.php fallback once we're done
+    if (typeof window.__bracePreloaderCleared === 'function') {
+      window.__bracePreloaderCleared();
+    }
   }
 
   /* ---------- Magnetic buttons ---------- */

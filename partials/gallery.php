@@ -32,7 +32,7 @@
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
   </button>
   <div class="lightbox__img-wrap">
-    <img id="lightbox-img" src="" alt="" width="1200" height="900">
+    <img id="lightbox-img" alt="" width="1200" height="900">
   </div>
   <div class="lightbox__counter" id="lightbox-counter">01 / 12</div>
   <p class="lightbox__caption" id="lightbox-caption"></p>
